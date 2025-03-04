@@ -14,5 +14,6 @@ Have a polished plot with an interesting insight from the data, a polished layou
 
 For this assignment, we are less concerned with the code and more concerned with the design. Choose good colors based on palettes. Choose good, clean fonts. Use the heck out of theme(). Add informative design elements. Make it look beautiful.
 
-**CAVIAT** \new line
+**CAVIAT**
+
 While this project lists a group with three additional members, this particular project was completed 99.99% by me. One person worked on fonts and background color (background not visible in github rendering of pdf)
