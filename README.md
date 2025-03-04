@@ -16,4 +16,4 @@ For this assignment, we are less concerned with the code and more concerned with
 
 **CAVIAT**
 
-While this project lists a group with three additional members, this particular project was completed 99.99% by me. One person worked on fonts and background color (background not visible in github rendering of pdf)
+While this project lists a group with three additional members, this particular project was completed 99.99% by me. One person worked on fonts and background color (background not visible in github rendering of pdf).
