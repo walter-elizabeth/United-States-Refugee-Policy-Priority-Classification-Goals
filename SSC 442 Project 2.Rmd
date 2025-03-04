@@ -1,0 +1,119 @@
+---
+title: "Project 2"
+author: "Group 7 - Dustin Dembeck, Elizabeth Walter, Brendan Poe, Cong Fu"
+date: "11/7/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Part 1
+### Data Cleaning & Summarizing
+
+```{r 1}
+library(tidyverse)    # For ggplot, dplyr, and friends
+library(countrycode)  # For dealing with country names, abbreviations, and codes
+library(lubridate)    # For dealing with dates
+library(scico)      # for color palettes
+```
+
+```{r 2}
+refugees_raw <- read_csv("C:/Users/walte/Desktop/MSU SSQDA/SSC 442/SSC 442 Project 2/refugee_status.csv", na = c("-", "X", "D"))
+
+non_countries <- c("Africa", "Asia", "Europe", "North America", "Oceania",
+                   "South America", "Unknown", "Other", "Total")
+
+refugees_clean <- refugees_raw %>%
+  # Make this column name easier to work with
+  rename(origin_country = `Continent/Country of Nationality`) %>%
+  # Get rid of non-countries
+  filter(!(origin_country %in% non_countries)) %>%
+  # Convert country names to ISO3 codes
+  mutate(iso3 = countrycode(origin_country, "country.name", "iso3c",
+                            custom_match = c("Korea, North" = "PRK"))) %>%
+  # Convert ISO3 codes to country names, regions, and continents
+  mutate(origin_country = countrycode(iso3, "iso3c", "country.name"),
+         origin_region = countrycode(iso3, "iso3c", "region"),
+         origin_continent = countrycode(iso3, "iso3c", "continent")) %>%
+  # Make this data tidy
+  gather(year, number, -origin_country, -iso3, -origin_region, -origin_continent) %>%
+  # Make sure the year column is numeric + make an actual date column for years
+  mutate(year = as.numeric(year),
+         year_date = ymd(paste0(year, "-01-01")))
+
+## Cumulative country totals over time - change na's to be useful
+refugees_countries_cumulative <- refugees_clean %>%
+  arrange(origin_country, year) %>%
+  group_by(origin_country) %>%
+  mutate(cumulative_total = cumsum(number),
+         cum_tot_lag1 = (cumulative_total - number),
+         rate = round(number/cum_tot_lag1,4), 
+         rate = ifelse(cum_tot_lag1 > 0, rate, 0)) %>%
+  arrange(desc(rate), origin_country, year)
+
+# Get total refugees from all countries to us each year
+total_to_us <- refugees_clean %>%
+  group_by(year) %>%
+  summarize(avg_num = mean(number, na.rm = TRUE), #avg number/country in year
+            ustotal = sum(number, na.rm = TRUE)) %>% #total accepted, all countries in year
+  mutate(cumulative = cumsum(ustotal))
+
+# Get percent of total refugees to us in given year for each country
+p_total_us <- refugees_clean %>%
+  group_by(origin_country, year) %>%
+  mutate(total = sum(number, na.rm = TRUE)) %>%
+  group_by(origin_country, year) %>%
+  mutate(cumulative_total = cumsum(total),
+         p_us_total = total/total_to_us$ustotal[total_to_us$year == year] * 100) %>%
+  arrange(year, desc(p_us_total))
+```
+
+### Plots
+
+```{r 3, echo=FALSE}
+scico_col <- scico(10, palette = 'roma')
+
+props_plot <- p_total_us %>% 
+  group_by(year) %>% 
+  slice_max(p_us_total, n = 5) %>%
+  ggplot(aes(x = year_date, y = p_us_total, fill = origin_country)) + 
+  geom_bar(position = 'stack', stat = 'identity') +
+  scale_x_date(date_breaks = '1 year', date_labels = "%Y") +
+  labs(x = "Year", y = "Percent of Total",
+       title = "Top 5 Origin Countries for Refugees by Year",
+       subtitle = "Proportion of total refugees admitted to United States by origin country, 2006 - 2015",
+       caption = "Note: No annual number available for Bhutan, 2007") + # 
+  theme_bw() +
+  theme(plot.title = element_text(color="black", size=18, face="bold",family = "sans", hjust = 0.5),
+        plot.subtitle = element_text(face = "italic", family = "serif", hjust = 0.5),
+        plot.caption = element_text(hjust = 1, face = 'italic'),
+        axis.title.x = element_text(color="#011111", size=14),
+        axis.title.y = element_text(color="#011111", size=14),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        axis.line = element_line(color = 'black', size = 1),
+        panel.border = element_blank(),
+        text = element_text(family = "sans")) +
+  scale_fill_manual(values = scico_col) + 
+  scale_colour_manual(values = scico_col)
+props_plot
+
+ggsave("plot.png", width = 8, height = 6)
+
+```
+
+## Part 2
+
+1. What are the factors related to CO2? Whether CO2 emissions from gaseous fuel consumption and CO2 emissions from solid fuel consumption have a positive relationship with CO2 emissions?
+
+2. How do world bank CPIA ratings correlate with a country’s ghg emissions; e.g. do countries with higher CPIA social protection ratings have greater renewable energy consumption relative to their total final energy consumption?
+
+3. Can we use this data to model the gaps between pledges and implementation of climate goals made by major contributing countries under the Paris Agreement?
+
+4. Does an increase in FDI into a country reduce that country’s share of non renewable to renewable energy output?
+
+5. Do carbon dioxide emissions have a more or less  significant value in populous countries?
