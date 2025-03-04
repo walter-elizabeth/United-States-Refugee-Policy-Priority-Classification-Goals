@@ -105,15 +105,3 @@ props_plot
 ggsave("plot.png", width = 8, height = 6)
 
 ```
-
-## Part 2
-
-1. What are the factors related to CO2? Whether CO2 emissions from gaseous fuel consumption and CO2 emissions from solid fuel consumption have a positive relationship with CO2 emissions?
-
-2. How do world bank CPIA ratings correlate with a country’s ghg emissions; e.g. do countries with higher CPIA social protection ratings have greater renewable energy consumption relative to their total final energy consumption?
-
-3. Can we use this data to model the gaps between pledges and implementation of climate goals made by major contributing countries under the Paris Agreement?
-
-4. Does an increase in FDI into a country reduce that country’s share of non renewable to renewable energy output?
-
-5. Do carbon dioxide emissions have a more or less  significant value in populous countries?
