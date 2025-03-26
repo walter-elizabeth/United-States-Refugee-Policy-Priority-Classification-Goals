@@ -13,7 +13,3 @@ The visualization needs to deal with change over time, and it needs to illustrat
 Have a polished plot with an interesting insight from the data, a polished layout to make it attractive, and a polished 2-4 paragraphs that sets up the plot and elaborates on your insight.
 
 For this assignment, we are less concerned with the code and more concerned with the design. Choose good colors based on palettes. Choose good, clean fonts. Use the heck out of theme(). Add informative design elements. Make it look beautiful.
-
-**CAVIAT**
-
-While this project lists a group with three additional members, this particular project was completed 99.99% by myself. One person worked on fonts and another tried to figure out why our background color used in Illustrator was not appearing when saved as a PDF. The latter was unsuccessful.
