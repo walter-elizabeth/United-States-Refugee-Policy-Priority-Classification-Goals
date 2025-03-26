@@ -6,7 +6,7 @@ Instructions:
 2. Clean the data.
 3. Summarize the data somehow.
 4. Create an appropriate time-based visualization based on the data.
-Don’t just calculate overall averages or totals per country—the visualization needs to deal with change over time, and it needs to illustrate something non-obvious and insightful in the data. Do as much polishing and refining in R—make adjustments to the colors, scales, labels, grid lines, and even fonts, etc. You may have more than one visualization, but only one is required.
+The visualization needs to deal with change over time, and it needs to illustrate something non-obvious and insightful in the data. Do as much polishing and refining in R—make adjustments to the colors, scales, labels, grid lines, and even fonts, etc. Only one is required.
 
 5. Refine and polish the saved image, adding annotations, changing colors, and otherwise enhancing it.
 6. Design and create an infographic “poster”.
